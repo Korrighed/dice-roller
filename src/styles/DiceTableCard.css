@@ -1,0 +1,81 @@
+.dice-table {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 35vw;
+  height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 1rem;
+
+  h2 {
+    margin: 0 0 0.5rem 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      display: block;
+    }
+
+    tbody {
+      display: block;
+      max-height: 43vh;
+      overflow-y: auto;
+    }
+
+    tr {
+      display: flex;
+    }
+
+    th,
+    td {
+      flex: 1;
+      padding: 0.5rem;
+    }
+  }
+
+  .header-row {
+    border-bottom: 2px solid #333;
+  }
+
+  .header-cell {
+    text-align: left;
+  }
+
+  .row {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .cell {
+    &.result {
+      font-weight: bold;
+    }
+  }
+
+  .delete-btn,
+  .clear-btn {
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .delete-btn {
+    padding: 0.25rem 0.5rem;
+    background-color: #f44336;
+  }
+
+  .clear-btn {
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    background-color: #ff6b6b;
+  }
+
+  .empty {
+    padding: 1rem;
+    text-align: center;
+  }
+}
