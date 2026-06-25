@@ -1,8 +1,7 @@
 import React from 'react';
-import { getRandomNum } from '../../utils/dice.ts';
 
 interface D6Props {
-  onRoll?: (diceType: string, value: number) => void;
+  onAddDice?: (diceType: string) => void;
 }
 
 const styles = {
@@ -21,17 +20,16 @@ const styles = {
   },
 };
 
-function D6({ onRoll }: D6Props) {
-  const rollD6 = () => {
-    const result = getRandomNum(6);
-    if (onRoll) {
-      onRoll('d6', result);
+function D6({ onAddDice }: D6Props) {
+  const addD6 = () => {
+    if (onAddDice) {
+      onAddDice('d6');
     }
   };
 
   return (
     <div style={styles.container}>
-      <button style={styles.button} onClick={rollD6}>Roll D6</button>
+      <button style={styles.button} onClick={addD6}>Add D6</button>
     </div>
   );
 }

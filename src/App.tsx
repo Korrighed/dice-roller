@@ -12,18 +12,19 @@ const styles = {
     gap: '1rem',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: '1rem',
   },
 };
 
 function App() {
-  const { rolls, lastRoll, addRoll, deleteRoll, clearAll } = useRolls();
+  const { rolls, pendingDice, addPendingDice, rollAllPending, deleteRoll, clearAll } = useRolls();
 
   return (
     <div style={styles.app}>
-      <DicesCard onRoll={addRoll} lastRoll={lastRoll} />
+      <DicesCard onAddDice={addPendingDice} pendingDice={pendingDice} onRollAll={rollAllPending} />
       <DiceTableCard
         rolls={rolls}
-        onAddRoll={addRoll}
+        onAddRoll={() => {}}
         onDeleteRoll={deleteRoll}
         onClearAll={clearAll}
       />
