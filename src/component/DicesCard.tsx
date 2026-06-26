@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 // @ts-ignore
 import '../styles/DicesCard.css';
-import D6 from './dices/d6.tsx';
+import Dice3DCanvas from './Dice3DCanvas.tsx';
+import DiceSelector from './DiceSelector.tsx';
 
 interface DicesCardProps {
   onAddDice: (diceType: string) => void;
   pendingDice: Array<{ id: string; diceType: string }>;
+  diceResults: Record<string, number>;
   onRollAll: () => void;
+  onResetResults: () => void;
+  onClearCanvas: () => void;
 }
 
 const styles = {
   card: {
     display: 'flex',
     flexDirection: 'column' as const,
+    flex: 1,
     gap: '1rem',
     padding: '1rem',
-    border: '2px solid #ddd',
-    borderRadius: '8px',
   },
   canvasContainer: {
     position: 'relative' as const,
-    width: '300px',
-    height: '300px',
+    flex: 1,
+    minHeight: '200px',
   },
   canvas: {
     width: '100%',
@@ -46,6 +49,19 @@ const styles = {
     fontSize: '0.8rem',
     zIndex: 10,
   },
+  clearButton: {
+    position: 'absolute' as const,
+    top: '8px',
+    right: '8px',
+    padding: '0.4rem 0.8rem',
+    backgroundColor: '#e74c3c',
+    color: 'white',
+    border: 'none',
+    cursor: 'pointer',
+    borderRadius: '4px',
+    fontSize: '0.8rem',
+    zIndex: 10,
+  },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
@@ -53,7 +69,9 @@ const styles = {
   },
 };
 
-function DicesCard({ onAddDice, pendingDice, onRollAll }: DicesCardProps) {
+function DicesCard({ onAddDice, pendingDice, diceResults, onRollAll, onResetResults, onClearCanvas }: DicesCardProps) {
+  const [isRolling, setIsRolling] = useState(false);
+
   const getDiceNotation = () => {
     const counts: Record<string, number> = {};
     pendingDice.forEach((dice) => {
@@ -64,33 +82,42 @@ function DicesCard({ onAddDice, pendingDice, onRollAll }: DicesCardProps) {
       .join('+');
   };
 
+  const handleRoll = () => {
+    onResetResults();
+    setIsRolling(true);
+    setTimeout(() => {
+      setIsRolling(false);
+      onRollAll();
+    }, 1000);
+  };
+
   return (
     <div style={styles.card}>
       <div style={styles.canvasContainer}>
         {pendingDice.length > 0 && (
-          <button style={styles.rollButton} onClick={onRollAll}>
-            Roll {getDiceNotation()}
-          </button>
+          <>
+            <button style={styles.rollButton} onClick={handleRoll}>
+              Roll {getDiceNotation()}
+            </button>
+            <button style={styles.clearButton} onClick={onClearCanvas}>
+              ✕
+            </button>
+          </>
         )}
-        <div style={styles.canvas}>
-          {pendingDice.length > 0 ? (
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: '0 0 0.5rem 0' }}>{getDiceNotation()}</p>
-              {pendingDice.map((dice) => (
-                <div key={dice.id} style={{ fontSize: '0.9rem' }}>
-                  {dice.diceType}
-                </div>
-              ))}
-            </div>
-          ) : (
+        {pendingDice.length > 0 ? (
+          <Dice3DCanvas
+            pendingDice={pendingDice}
+            diceResults={diceResults}
+            isRolling={isRolling}
+          />
+        ) : (
+          <div style={styles.canvas}>
             <div style={{ color: '#999' }}>Canvas 3D</div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      <div style={styles.grid}>
-        <D6 onAddDice={onAddDice} />
-      </div>
+      <DiceSelector onAddDice={onAddDice} />
     </div>
   );
 }

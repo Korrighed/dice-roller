@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getRandomNum } from '../utils/dice.ts';
 import { storage } from '../utils/storage.ts';
+import { DICE_MAP } from '../config/diceRegistry.ts';
 
 interface DiceResult {
   diceType: string;
@@ -24,11 +24,14 @@ interface UseRollsReturn {
   rolls: Roll[];
   lastRoll: Roll | null;
   pendingDice: PendingDice[];
+  diceResults: Record<string, number>;
   addPendingDice: (diceType: string) => void;
   removePendingDice: (id: string) => void;
   rollAllPending: () => void;
+  clearPendingDice: () => void;
   deleteRoll: (id: string) => void;
   clearAll: () => void;
+  resetDiceResults: () => void;
 }
 
 export function useRolls(): UseRollsReturn {
@@ -38,6 +41,7 @@ export function useRolls(): UseRollsReturn {
   });
 
   const [pendingDice, setPendingDice] = useState<PendingDice[]>([]);
+  const [diceResults, setDiceResults] = useState<Record<string, number>>({});
 
   useEffect(() => {
     storage.save(rolls);
@@ -56,20 +60,13 @@ export function useRolls(): UseRollsReturn {
   };
 
   const rollAllPending = () => {
-    const maxByDiceType: Record<string, number> = {
-      d4: 4,
-      d6: 6,
-      d8: 8,
-      d12: 12,
-      d20: 20,
-      d100: 100,
-    };
-
+    const newResults: Record<string, number> = {};
     const results: DiceResult[] = pendingDice.map((dice) => {
-      const max = maxByDiceType[dice.diceType] || 6;
+      const result = DICE_MAP[dice.diceType]?.roll() ?? 1;
+      newResults[dice.id] = result;
       return {
         diceType: dice.diceType,
-        result: getRandomNum(max),
+        result,
       };
     });
 
@@ -92,27 +89,40 @@ export function useRolls(): UseRollsReturn {
     };
 
     setRolls([newRoll, ...rolls]);
-    setPendingDice([]);
+    setDiceResults((prev) => ({ ...prev, ...newResults }));
   };
 
   const deleteRoll = (id: string) => {
     setRolls(rolls.filter((roll) => roll.id !== id));
   };
 
+  const clearPendingDice = () => {
+    setPendingDice([]);
+    setDiceResults({});
+  };
+
   const clearAll = () => {
     setRolls([]);
     setPendingDice([]);
+    setDiceResults({});
     storage.clear();
+  };
+
+  const resetDiceResults = () => {
+    setDiceResults({});
   };
 
   return {
     rolls,
     lastRoll: rolls.length > 0 ? rolls[0] : null,
     pendingDice,
+    diceResults,
     addPendingDice,
     removePendingDice,
     rollAllPending,
+    clearPendingDice,
     deleteRoll,
     clearAll,
+    resetDiceResults,
   };
 }
