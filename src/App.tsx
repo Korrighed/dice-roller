@@ -3,31 +3,39 @@ import DicesCard from './component/DicesCard.tsx';
 import DiceTableCard from './component/DiceTableCard.tsx';
 import { useRolls } from './hooks/useRolls.tsx';
 
-const styles = {
-  app: {
-    display: 'flex',
-    flexDirection: 'row' as const,
-    height: '80vh',
-    width: '100vw',
-    gap: '1rem',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '1rem',
-  },
-};
-
 function App() {
-  const { rolls, pendingDice, addPendingDice, rollAllPending, deleteRoll, clearAll } = useRolls();
+  const { rolls, pendingDice, diceResults, addPendingDice, rollAllPending, clearPendingDice, deleteRoll, clearAll, resetDiceResults } = useRolls();
 
   return (
-    <div style={styles.app}>
-      <DicesCard onAddDice={addPendingDice} pendingDice={pendingDice} onRollAll={rollAllPending} />
-      <DiceTableCard
-        rolls={rolls}
-        onAddRoll={() => {}}
-        onDeleteRoll={deleteRoll}
-        onClearAll={clearAll}
-      />
+    <div className="app-layout">
+      <header className="app-header">
+        <span className="app-header-title">RPG Dice Roller</span>
+        <span className="app-header-sub">D&D &amp; TTRPG</span>
+      </header>
+
+      <main className="app-main">
+        <div className="app-card">
+          <DicesCard
+            onAddDice={addPendingDice}
+            pendingDice={pendingDice}
+            diceResults={diceResults}
+            onRollAll={rollAllPending}
+            onResetResults={resetDiceResults}
+            onClearCanvas={clearPendingDice}
+          />
+          <div className="app-divider" />
+          <DiceTableCard
+            rolls={rolls}
+            onAddRoll={() => {}}
+            onDeleteRoll={deleteRoll}
+            onClearAll={clearAll}
+          />
+        </div>
+      </main>
+
+      <footer className="app-footer">
+        <span>RPG Dice Roller &copy; {new Date().getFullYear()}</span>
+      </footer>
     </div>
   );
 }
