@@ -3,12 +3,9 @@ import * as THREE from 'three';
 
 const loader = new THREE.TextureLoader();
 
-export function useTexturedMaterials(
-  paths: string[],
-  fallbackColor: string
-): THREE.MeshStandardMaterial[] {
+export function useTexturedMaterials(paths: string[]): THREE.MeshStandardMaterial[] {
   const [materials, setMaterials] = useState<THREE.MeshStandardMaterial[]>(() =>
-    paths.map(() => new THREE.MeshStandardMaterial({ color: fallbackColor }))
+    paths.map(() => new THREE.MeshStandardMaterial({ transparent: true, opacity: 0 }))
   );
 
   useEffect(() => {
