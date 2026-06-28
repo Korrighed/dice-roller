@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { storage } from '../utils/storage.ts';
-import { DICE_MAP } from '../config/diceRegistry.ts';
+import { DICE_MAP, DICE_REGISTRY } from '../config/diceRegistry.ts';
 
 interface DiceResult {
   diceType: string;
@@ -15,9 +15,11 @@ interface Roll {
   timestamp: string;
 }
 
-interface PendingDice {
+export interface PendingDice {
   id: string;
   diceType: string;
+  pairId?: string;
+  role?: 'tens' | 'units';
 }
 
 interface UseRollsReturn {
@@ -25,6 +27,8 @@ interface UseRollsReturn {
   lastRoll: Roll | null;
   pendingDice: PendingDice[];
   diceResults: Record<string, number>;
+  modifier: number;
+  setModifier: (n: number) => void;
   addPendingDice: (diceType: string) => void;
   removePendingDice: (id: string) => void;
   rollAllPending: () => void;
@@ -40,45 +44,83 @@ export function useRolls(): UseRollsReturn {
     return saved || [];
   });
 
-  const [pendingDice, setPendingDice] = useState<PendingDice[]>([]);
+  const [pendingDice, setPendingDice] = useState<PendingDice[]>(() =>
+    DICE_REGISTRY.map((def) => ({ id: def.type, diceType: def.type }))
+  );
   const [diceResults, setDiceResults] = useState<Record<string, number>>({});
+  const [modifier, setModifier] = useState<number>(0);
 
   useEffect(() => {
     storage.save(rolls);
   }, [rolls]);
 
   const addPendingDice = (diceType: string) => {
-    const newPending: PendingDice = {
-      id: Date.now().toString() + Math.random(),
-      diceType,
-    };
-    setPendingDice([...pendingDice, newPending]);
+    if (diceType === 'd100') {
+      const pairId = Date.now().toString() + Math.random();
+      setPendingDice((prev) => [
+        ...prev,
+        { id: pairId + '_h', diceType: 'd100', pairId, role: 'tens' },
+        { id: pairId + '_u', diceType: 'd10',  pairId, role: 'units' },
+      ]);
+    } else {
+      setPendingDice((prev) => [
+        ...prev,
+        { id: Date.now().toString() + Math.random(), diceType },
+      ]);
+    }
   };
 
   const removePendingDice = (id: string) => {
-    setPendingDice(pendingDice.filter((dice) => dice.id !== id));
+    setPendingDice((prev) => prev.filter((d) => d.id !== id));
   };
 
   const rollAllPending = () => {
     const newResults: Record<string, number> = {};
-    const results: DiceResult[] = pendingDice.map((dice) => {
-      const result = DICE_MAP[dice.diceType]?.roll() ?? 1;
-      newResults[dice.id] = result;
-      return {
-        diceType: dice.diceType,
-        result,
-      };
+    const rawRolls: Record<string, number> = {};
+
+    pendingDice.forEach((dice) => {
+      const r = DICE_MAP[dice.diceType]?.roll() ?? 1;
+      rawRolls[dice.id] = r;
+      newResults[dice.id] = r;
     });
 
-    const total = results.reduce((sum, r) => sum + r.result, 0);
+    const results: DiceResult[] = [];
+    const processedPairs = new Set<string>();
+
+    pendingDice.forEach((dice) => {
+      if (dice.pairId && dice.role === 'tens' && !processedPairs.has(dice.pairId)) {
+        processedPairs.add(dice.pairId);
+        const partner = pendingDice.find((d) => d.pairId === dice.pairId && d.role === 'units');
+        if (partner) {
+          const tensRoll  = rawRolls[dice.id];     // D100: 10, 20 … 100
+          const unitsRoll = rawRolls[partner.id];  // D10: 1 … 10
+          const tens  = tensRoll  === 100 ? 0 : tensRoll;
+          const units = unitsRoll === 10  ? 0 : unitsRoll;
+          const combined = tens === 0 && units === 0 ? 100 : tens + units;
+          results.push({ diceType: 'd%', result: combined });
+        }
+      } else if (!dice.pairId) {
+        results.push({ diceType: dice.diceType, result: rawRolls[dice.id] });
+      }
+    });
+
+    const diceTotal = results.reduce((sum, r) => sum + r.result, 0);
+    const total = diceTotal + modifier;
 
     const counts: Record<string, number> = {};
+    const seenPairs = new Set<string>();
     pendingDice.forEach((dice) => {
-      counts[dice.diceType] = (counts[dice.diceType] || 0) + 1;
+      if (dice.pairId && dice.role === 'tens' && !seenPairs.has(dice.pairId)) {
+        seenPairs.add(dice.pairId);
+        counts['d%'] = (counts['d%'] || 0) + 1;
+      } else if (!dice.pairId) {
+        counts[dice.diceType] = (counts[dice.diceType] || 0) + 1;
+      }
     });
+    const modifierStr = modifier > 0 ? `+${modifier}` : modifier < 0 ? `${modifier}` : '';
     const notation = Object.entries(counts)
       .map(([type, count]) => `${count}${type}`)
-      .join('+');
+      .join('+') + modifierStr;
 
     const newRoll: Roll = {
       id: Date.now().toString(),
@@ -117,6 +159,8 @@ export function useRolls(): UseRollsReturn {
     lastRoll: rolls.length > 0 ? rolls[0] : null,
     pendingDice,
     diceResults,
+    modifier,
+    setModifier,
     addPendingDice,
     removePendingDice,
     rollAllPending,

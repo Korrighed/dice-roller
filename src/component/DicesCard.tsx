@@ -3,11 +3,14 @@ import React, { useState } from 'react';
 import '../styles/DicesCard.css';
 import Dice3DCanvas from './Dice3DCanvas.tsx';
 import DiceSelector from './DiceSelector.tsx';
+import { PendingDice } from '../hooks/useRolls.tsx';
 
 interface DicesCardProps {
   onAddDice: (diceType: string) => void;
-  pendingDice: Array<{ id: string; diceType: string }>;
+  pendingDice: PendingDice[];
   diceResults: Record<string, number>;
+  modifier: number;
+  onModifierChange: (n: number) => void;
   onRollAll: () => void;
   onResetResults: () => void;
   onClearCanvas: () => void;
@@ -69,13 +72,19 @@ const styles = {
   },
 };
 
-function DicesCard({ onAddDice, pendingDice, diceResults, onRollAll, onResetResults, onClearCanvas }: DicesCardProps) {
+function DicesCard({ onAddDice, pendingDice, diceResults, modifier, onModifierChange, onRollAll, onResetResults, onClearCanvas }: DicesCardProps) {
   const [isRolling, setIsRolling] = useState(false);
 
   const getDiceNotation = () => {
     const counts: Record<string, number> = {};
+    const seenPairs = new Set<string>();
     pendingDice.forEach((dice) => {
-      counts[dice.diceType] = (counts[dice.diceType] || 0) + 1;
+      if (dice.pairId && dice.role === 'tens' && !seenPairs.has(dice.pairId)) {
+        seenPairs.add(dice.pairId);
+        counts['d%'] = (counts['d%'] || 0) + 1;
+      } else if (!dice.pairId) {
+        counts[dice.diceType] = (counts[dice.diceType] || 0) + 1;
+      }
     });
     return Object.entries(counts)
       .map(([type, count]) => `${count}${type}`)
@@ -117,7 +126,7 @@ function DicesCard({ onAddDice, pendingDice, diceResults, onRollAll, onResetResu
         )}
       </div>
 
-      <DiceSelector onAddDice={onAddDice} />
+      <DiceSelector onAddDice={onAddDice} modifier={modifier} onModifierChange={onModifierChange} />
     </div>
   );
 }

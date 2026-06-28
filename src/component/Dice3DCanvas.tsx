@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useDiceRotation, useD6Textures, useD6Materials, D6_SIZE, FACE_UP as D6_FACE_UP } from '../hooks/useD6.ts';
-import { useD4Textures, useD4Materials, D4_RADIUS, FACE_UP as D4_FACE_UP } from '../hooks/useD4.ts';
-import { useD8Textures, useD8Materials, D8_RADIUS, FACE_UP as D8_FACE_UP } from '../hooks/useD8.ts';
-import { useD10Textures, useD10Materials, D10_RADIUS, FACE_UP as D10_FACE_UP } from '../hooks/useD10.ts';
-import { useD12Textures, useD12Materials, D12_RADIUS, FACE_UP as D12_FACE_UP } from '../hooks/useD12.ts';
-import { useD20Textures, useD20Materials, D20_RADIUS, FACE_UP as D20_FACE_UP } from '../hooks/useD20.ts';
-import { useD100Textures, useD100Materials, D100_RADIUS, FACE_UP as D100_FACE_UP } from '../hooks/useD100.ts';
+import { useD4Textures, useD4Materials, useD4Geometry, FACE_UP as D4_FACE_UP } from '../hooks/useD4.ts';
+import { useD8Textures, useD8Materials, useD8Geometry, FACE_UP as D8_FACE_UP } from '../hooks/useD8.ts';
+import { useD10Textures, useD10Materials, useD10Geometry, FACE_UP as D10_FACE_UP } from '../hooks/useD10.ts';
+import { useD12Textures, useD12Materials, useD12Geometry, FACE_UP as D12_FACE_UP } from '../hooks/useD12.ts';
+import { useD20Textures, useD20Materials, useD20Geometry, FACE_UP as D20_FACE_UP } from '../hooks/useD20.ts';
+import { useD100Textures, useD100Materials, useD100Geometry, FACE_UP as D100_FACE_UP } from '../hooks/useD100.ts';
 import * as THREE from 'three';
 
 interface CanvasItemProps {
@@ -47,7 +47,8 @@ function DiceBase({
 function D4Item(props: CanvasItemProps) {
   const textures = useD4Textures();
   const materials = useD4Materials(textures as THREE.Texture[]);
-  return <DiceBase {...props} materials={materials} faceUp={D4_FACE_UP}><tetrahedronGeometry args={[D4_RADIUS, 0]} /></DiceBase>;
+  const geometry = useD4Geometry();
+  return <DiceBase {...props} materials={materials} faceUp={D4_FACE_UP}><primitive object={geometry} attach="geometry" /></DiceBase>;
 }
 
 function D6Item(props: CanvasItemProps) {
@@ -59,31 +60,36 @@ function D6Item(props: CanvasItemProps) {
 function D8Item(props: CanvasItemProps) {
   const textures = useD8Textures();
   const materials = useD8Materials(textures as THREE.Texture[]);
-  return <DiceBase {...props} materials={materials} faceUp={D8_FACE_UP}><octahedronGeometry args={[D8_RADIUS, 0]} /></DiceBase>;
+  const geometry = useD8Geometry();
+  return <DiceBase {...props} materials={materials} faceUp={D8_FACE_UP}><primitive object={geometry} attach="geometry" /></DiceBase>;
 }
 
 function D10Item(props: CanvasItemProps) {
   const textures = useD10Textures();
   const materials = useD10Materials(textures as THREE.Texture[]);
-  return <DiceBase {...props} materials={materials} faceUp={D10_FACE_UP}><sphereGeometry args={[D10_RADIUS, 10, 10]} /></DiceBase>;
+  const geometry = useD10Geometry();
+  return <DiceBase {...props} materials={materials} faceUp={D10_FACE_UP}><primitive object={geometry} attach="geometry" /></DiceBase>;
 }
 
 function D12Item(props: CanvasItemProps) {
   const textures = useD12Textures();
   const materials = useD12Materials(textures as THREE.Texture[]);
-  return <DiceBase {...props} materials={materials} faceUp={D12_FACE_UP}><dodecahedronGeometry args={[D12_RADIUS, 0]} /></DiceBase>;
+  const geometry = useD12Geometry();
+  return <DiceBase {...props} materials={materials} faceUp={D12_FACE_UP}><primitive object={geometry} attach="geometry" /></DiceBase>;
 }
 
 function D20Item(props: CanvasItemProps) {
   const textures = useD20Textures();
   const materials = useD20Materials(textures as THREE.Texture[]);
-  return <DiceBase {...props} materials={materials} faceUp={D20_FACE_UP}><icosahedronGeometry args={[D20_RADIUS, 0]} /></DiceBase>;
+  const geometry = useD20Geometry();
+  return <DiceBase {...props} materials={materials} faceUp={D20_FACE_UP}><primitive object={geometry} attach="geometry" /></DiceBase>;
 }
 
 function D100Item(props: CanvasItemProps) {
   const textures = useD100Textures();
   const materials = useD100Materials(textures as THREE.Texture[]);
-  return <DiceBase {...props} materials={materials} faceUp={D100_FACE_UP}><sphereGeometry args={[D100_RADIUS, 10, 10]} /></DiceBase>;
+  const geometry = useD100Geometry();
+  return <DiceBase {...props} materials={materials} faceUp={D100_FACE_UP}><primitive object={geometry} attach="geometry" /></DiceBase>;
 }
 
 const DICE_ITEMS: Record<string, React.ComponentType<CanvasItemProps>> = {

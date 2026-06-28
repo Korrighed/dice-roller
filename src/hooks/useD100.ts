@@ -1,9 +1,20 @@
 import { useMemo } from 'react';
 import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
+import { buildBipyramidGeo } from './useD10.ts';
+import { computeFaceUp } from '../utils/faceUp.ts';
 
 export const D100_RADIUS = 0.4;
+
+const _tmp = buildBipyramidGeo(1);
+const _raw = computeFaceUp(_tmp);
 export const FACE_UP: Record<number, [number, number, number]> = {};
+for (let i = 1; i <= 10; i++) FACE_UP[i * 10] = _raw[i];
+_tmp.dispose();
+
+export function useD100Geometry() {
+  return useMemo(() => buildBipyramidGeo(D100_RADIUS), []);
+}
 
 export function useD100Textures() {
   return useLoader(THREE.TextureLoader, [

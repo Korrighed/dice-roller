@@ -1,13 +1,23 @@
 import { useMemo } from 'react';
 import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
-import { computeFaceUp } from '../utils/faceUp.ts';
+import { computeFaceUp, normalizeGroupUVs } from '../utils/faceUp.ts';
 
 export const D20_RADIUS = 0.4;
 
 const _d20Geo = new THREE.IcosahedronGeometry(1, 0);
+for (let i = 0; i < 20; i++) _d20Geo.addGroup(i * 3, 3, i);
 export const FACE_UP = computeFaceUp(_d20Geo);
 _d20Geo.dispose();
+
+export function useD20Geometry() {
+  return useMemo(() => {
+    const geo = new THREE.IcosahedronGeometry(D20_RADIUS, 0);
+    for (let i = 0; i < 20; i++) geo.addGroup(i * 3, 3, i);
+    normalizeGroupUVs(geo);
+    return geo;
+  }, []);
+}
 
 export function useD20Textures() {
   return useLoader(THREE.TextureLoader, [

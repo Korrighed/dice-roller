@@ -4,7 +4,7 @@ import DiceTableCard from './component/DiceTableCard.tsx';
 import { useRolls } from './hooks/useRolls.tsx';
 
 function App() {
-  const { rolls, pendingDice, diceResults, addPendingDice, rollAllPending, clearPendingDice, deleteRoll, clearAll, resetDiceResults } = useRolls();
+  const { rolls, pendingDice, diceResults, modifier, setModifier, addPendingDice, rollAllPending, clearPendingDice, deleteRoll, clearAll, resetDiceResults } = useRolls();
 
   return (
     <div className="app-layout">
@@ -19,6 +19,8 @@ function App() {
             onAddDice={addPendingDice}
             pendingDice={pendingDice}
             diceResults={diceResults}
+            modifier={modifier}
+            onModifierChange={setModifier}
             onRollAll={rollAllPending}
             onResetResults={resetDiceResults}
             onClearCanvas={clearPendingDice}

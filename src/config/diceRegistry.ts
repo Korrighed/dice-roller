@@ -19,7 +19,7 @@ export const DICE_REGISTRY: DiceDef[] = [
   def('d10',  10),
   def('d12',  12),
   def('d20',  20),
-  def('d100', 100),
+  { type: 'd100', max: 100, roll: () => Math.ceil(Math.random() * 10) * 10 },
 ];
 
 export const DICE_MAP: Record<string, DiceDef> = Object.fromEntries(
