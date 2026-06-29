@@ -18,8 +18,6 @@ interface DicesCardProps {
 
 const styles = {
   card: {
-    display: 'flex',
-    flex: 1,
     gap: '0',
     padding: '0',
   },
@@ -71,11 +69,6 @@ const styles = {
     borderRadius: '4px',
     fontSize: '0.8rem',
     zIndex: 10,
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
-    gap: '0.5rem',
   },
 };
 

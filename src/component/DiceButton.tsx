@@ -11,7 +11,6 @@ const buttonStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '100%',
   background: 'none',
   border: 'none',
   padding: '0',

@@ -1,20 +1,16 @@
-/* Mobile: vertical layout, grid adapts to available height */
-.dice-selector {
-  flex-direction: column;
-  width: 100%;
-}
+/* === DiceSelector.css
+   Déclare : grid-template-columns et grid-auto-rows selon breakpoint
+   Ne déclare PAS : display, flex-direction, padding, gap (gérés en inline dans DiceSelector.tsx)
+=== */
 
+/* Mobile: 4 colonnes égales */
 .dice-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: minmax(0, 1fr);
 }
 
-/* Desktop: side-by-side with canvas */
+/* Desktop: 2 colonnes égales, hauteur auto */
 @media (min-width: 768px) {
-  .dice-selector {
-    width: 100%;
-  }
-
   .dice-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: auto;
