@@ -44,9 +44,7 @@ export function useRolls(): UseRollsReturn {
     return saved || [];
   });
 
-  const [pendingDice, setPendingDice] = useState<PendingDice[]>(() =>
-    DICE_REGISTRY.map((def) => ({ id: def.type, diceType: def.type }))
-  );
+  const [pendingDice, setPendingDice] = useState<PendingDice[]>([]);
   const [diceResults, setDiceResults] = useState<Record<string, number>>({});
   const [modifier, setModifier] = useState<number>(0);
 
@@ -97,7 +95,7 @@ export function useRolls(): UseRollsReturn {
           const tens  = tensRoll  === 100 ? 0 : tensRoll;
           const units = unitsRoll === 10  ? 0 : unitsRoll;
           const combined = tens === 0 && units === 0 ? 100 : tens + units;
-          results.push({ diceType: 'd%', result: combined });
+          results.push({ diceType: 'd100', result: combined });
         }
       } else if (!dice.pairId) {
         results.push({ diceType: dice.diceType, result: rawRolls[dice.id] });
@@ -112,7 +110,7 @@ export function useRolls(): UseRollsReturn {
     pendingDice.forEach((dice) => {
       if (dice.pairId && dice.role === 'tens' && !seenPairs.has(dice.pairId)) {
         seenPairs.add(dice.pairId);
-        counts['d%'] = (counts['d%'] || 0) + 1;
+        counts['d100'] = (counts['d100'] || 0) + 1;
       } else if (!dice.pairId) {
         counts[dice.diceType] = (counts[dice.diceType] || 0) + 1;
       }
