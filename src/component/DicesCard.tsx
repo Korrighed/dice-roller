@@ -19,7 +19,6 @@ interface DicesCardProps {
 const styles = {
   card: {
     display: 'flex',
-    flexDirection: 'column' as const,
     flex: 1,
     gap: '0',
     padding: '0',
@@ -27,7 +26,6 @@ const styles = {
   canvasSection: {
     display: 'flex',
     flexDirection: 'column' as const,
-    flex: '1 1 60%',
     gap: '1rem',
     padding: '1rem',
     minWidth: '0',

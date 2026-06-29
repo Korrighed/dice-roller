@@ -1,4 +1,4 @@
-/* Mobile: full width, flex column */
+/* Mobile: stacked */
 .dices-card {
   display: flex;
   flex-direction: column;
@@ -8,28 +8,28 @@
 }
 
 .dices-card > div:first-child {
-  flex: 1 1 60%;
+  flex: 1 1 auto;
   min-height: 0;
 }
 
 .dices-card > div:last-child {
-  flex: 1 1 40%;
-  min-height: 0;
+  flex: 0 0 auto;
+  overflow: hidden;
 }
 
-/* Desktop: side-by-side layout */
+/* Desktop: side-by-side */
 @media (min-width: 768px) {
   .dices-card {
     flex-direction: row;
   }
 
   .dices-card > div:first-child {
-    flex: 1;
+    flex: 1 1 auto;
     border-right: 1px solid #eee;
   }
 
   .dices-card > div:last-child {
-    flex: 0 0 auto;
+    flex: 0 0 160px;
   }
 }
 

@@ -31,7 +31,7 @@
   flex: 1;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: 65vh auto;
   gap: 1rem;
   padding: 1rem;
   overflow-y: auto;

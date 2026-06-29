@@ -6,18 +6,15 @@ import '../styles/DiceSelector.css';
 const wrapStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
-  padding: '1rem',
-  flex: '1 1 40%',
-  minHeight: '0',
-  overflow: 'auto',
+  gap: '0.25rem',
+  padding: '0.5rem',
+  overflow: 'hidden',
+  boxSizing: 'border-box',
 };
 
 const diceGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
-  gap: '0.5rem',
-  justifyItems: 'center',
+  gap: '0.25rem',
 };
 
 const modifierWrapStyle: React.CSSProperties = {
@@ -34,11 +31,11 @@ const modifierLabelStyle: React.CSSProperties = {
 };
 
 const modifierInputStyle: React.CSSProperties = {
-  width: '70px',
-  padding: '0.5rem 0.4rem',
+  width: '35px',
+  padding: '0.25rem 0.2rem',
   border: '2px solid #ddd',
-  borderRadius: '6px',
-  fontSize: '0.9rem',
+  borderRadius: '4px',
+  fontSize: '0.75rem',
   textAlign: 'center',
   fontWeight: 'bold',
 };
@@ -60,9 +57,10 @@ export default function DiceSelector({ onAddDice, modifier, onModifierChange }: 
           <span style={modifierLabelStyle}>+</span>
           <input
             type="number"
+            min={0}
             style={modifierInputStyle}
             value={modifier}
-            onChange={(e) => onModifierChange(parseInt(e.target.value) || 0)}
+            onChange={(e) => onModifierChange(Math.max(0, parseInt(e.target.value) || 0))}
             onFocus={(e) => e.target.select()}
           />
         </div>

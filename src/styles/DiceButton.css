@@ -1,0 +1,10 @@
+.dice-button {
+  width: 100%;
+}
+
+.dice-button svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
