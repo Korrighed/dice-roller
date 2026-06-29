@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="app-layout">
       <header className="app-header">
-        <span className="app-header-title">RPG Dice Roller</span>
+        <span className="app-header-title">Lanceur de Dés</span>
         <span className="app-header-sub">D&D &amp; TTRPG</span>
       </header>
 
@@ -37,7 +37,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <span>RPG Dice Roller &copy; {new Date().getFullYear()}</span>
+        <span>Lanceur de Dés &copy; {new Date().getFullYear()}</span>
       </footer>
     </div>
   );

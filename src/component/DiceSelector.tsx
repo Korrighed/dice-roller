@@ -1,6 +1,6 @@
 import React from 'react';
 import DiceButton from './DiceButton.tsx';
-import { DICE_REGISTRY } from '../config/diceRegistry.ts';
+import { DICE_CONFIGS } from '../components/Dice/configs/index.ts';
 import '../styles/DiceSelector.css';
 
 const wrapStyle: React.CSSProperties = {
@@ -51,8 +51,8 @@ export default function DiceSelector({ onAddDice, modifier, onModifierChange }: 
   return (
     <div style={wrapStyle} className="dice-selector">
       <div style={{...diceGridStyle, gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: 'auto'}}>
-        {DICE_REGISTRY.map((def) => (
-          <DiceButton key={def.type} type={def.type} onClick={onAddDice} />
+        {Object.values(DICE_CONFIGS).map((config) => (
+          <DiceButton key={config.type} type={config.type} onClick={onAddDice} />
         ))}
         <div style={modifierWrapStyle}>
           <span style={modifierLabelStyle}>+</span>

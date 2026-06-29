@@ -31,10 +31,10 @@
   flex: 1;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 1rem;
   padding: 1rem;
-  overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 

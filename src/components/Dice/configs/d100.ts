@@ -1,11 +1,7 @@
-import { useMemo } from 'react';
-import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
-import { computeFaceUp } from '../utils/faceUp.ts';
+import { computeFaceUp } from '../../../utils/faceUp.ts';
 
-export const D10_RADIUS = 0.4;
-
-export function buildBipyramidGeo(radius: number): THREE.BufferGeometry {
+function buildBipyramidGeo(radius: number): THREE.BufferGeometry {
   const h = radius;
   const r = radius * 0.9;
 
@@ -16,7 +12,6 @@ export function buildBipyramidGeo(radius: number): THREE.BufferGeometry {
     return new THREE.Vector3(r * Math.cos(a), 0, r * Math.sin(a));
   });
 
-  // 5 faces supérieures + 5 faces inférieures intercalées
   const faces: [THREE.Vector3, THREE.Vector3, THREE.Vector3][] = [];
   for (let i = 0; i < 5; i++) {
     const n = (i + 1) % 5;
@@ -49,24 +44,24 @@ export function buildBipyramidGeo(radius: number): THREE.BufferGeometry {
 }
 
 const _tmp = buildBipyramidGeo(1);
-export const FACE_UP = computeFaceUp(_tmp);
+const _raw = computeFaceUp(_tmp);
+const _faceUp: Record<number, [number, number, number]> = {};
+for (let i = 1; i <= 10; i++) _faceUp[i * 10] = _raw[i];
 _tmp.dispose();
 
-export function useD10Geometry() {
-  return useMemo(() => buildBipyramidGeo(D10_RADIUS), []);
-}
+const getD100Roll = () => Math.ceil(Math.random() * 10) * 10;
 
-export function useD10Textures() {
-  return useLoader(THREE.TextureLoader, [
-    '/d10/D10F1.png', '/d10/D10F2.png', '/d10/D10F3.png', '/d10/D10F4.png',
-    '/d10/D10F5.png', '/d10/D10F6.png', '/d10/D10F7.png', '/d10/D10F8.png',
-    '/d10/D10F9.png', '/d10/D10F10.png',
-  ]);
-}
-
-export function useD10Materials(textures: THREE.Texture[]) {
-  return useMemo(() => {
-    const arr = Array.isArray(textures) ? textures : [textures];
-    return arr.slice(0, 10).map((t) => new THREE.MeshStandardMaterial({ map: t }));
-  }, [textures]);
-}
+export const d100Config = {
+  type: 'd100' as const,
+  maxValue: 100,
+  radius: 0.4,
+  roll: getD100Roll,
+  textureUrls: [
+    '/d100/D100F10.png', '/d100/D100F20.png', '/d100/D100F30.png',
+    '/d100/D100F40.png', '/d100/D100F50.png', '/d100/D100F60.png',
+    '/d100/D100F70.png', '/d100/D100F80.png', '/d100/D100F90.png',
+    '/d100/D100F100.png',
+  ],
+  faceUp: _faceUp,
+  createGeometry: (radius: number) => buildBipyramidGeo(radius),
+};

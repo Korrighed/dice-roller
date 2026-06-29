@@ -95,7 +95,7 @@ export default function DiceButton({ type, onClick }: DiceButtonProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onClick(type)}
-      title={`Add ${type}`}
+      title={`Ajouter ${type}`}
     >
       {getDiceShape(type)}
     </button>

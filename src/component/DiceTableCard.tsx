@@ -29,7 +29,7 @@ function DiceTableCard({ rolls, onDeleteRoll, onClearAll }: DiceTableCardProps) 
       <table>
         <thead>
           <tr className="header-row">
-            <th className="header-cell">Notation</th>
+            <th className="header-cell">Dés</th>
             <th className="header-cell">Résultats</th>
             <th className="header-cell">Total</th>
             <th className="header-cell">Actions</th>

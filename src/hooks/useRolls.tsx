@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { storage } from '../utils/storage.ts';
-import { DICE_MAP, DICE_REGISTRY } from '../config/diceRegistry.ts';
+import { DICE_CONFIGS } from '../components/Dice/configs/index.ts';
 
 interface DiceResult {
   diceType: string;
@@ -77,7 +77,8 @@ export function useRolls(): UseRollsReturn {
     const rawRolls: Record<string, number> = {};
 
     pendingDice.forEach((dice) => {
-      const r = DICE_MAP[dice.diceType]?.roll() ?? 1;
+      const config = DICE_CONFIGS[dice.diceType as keyof typeof DICE_CONFIGS];
+      const r = config?.roll() ?? 1;
       rawRolls[dice.id] = r;
       newResults[dice.id] = r;
     });
