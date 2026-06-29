@@ -5,12 +5,15 @@ export function computeFaceUp(geometry: THREE.BufferGeometry): Record<number, [n
   const normalAttr = geometry.attributes.normal;
   const up = new THREE.Vector3(0, 1, 0);
 
+  const indexAttr = geometry.index;
+
   geometry.groups.forEach((group, i) => {
     const n = new THREE.Vector3();
     for (let j = group.start; j < group.start + group.count; j++) {
-      n.x += normalAttr.getX(j);
-      n.y += normalAttr.getY(j);
-      n.z += normalAttr.getZ(j);
+      const vi = indexAttr ? indexAttr.getX(j) : j;
+      n.x += normalAttr.getX(vi);
+      n.y += normalAttr.getY(vi);
+      n.z += normalAttr.getZ(vi);
     }
     n.normalize();
     const q = new THREE.Quaternion().setFromUnitVectors(n, up);
