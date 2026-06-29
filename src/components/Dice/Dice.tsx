@@ -55,7 +55,7 @@ export default function Dice({ type, position, result, isRolling = false }: Dice
 
     const animationId = setInterval(animate, 1000 / 60);
     return () => clearInterval(animationId);
-  }, [isRolling, result, config]);
+  }, [isRolling, result, config, speedRef]);
 
   return (
     <mesh ref={meshRef} material={materials} position={position} geometry={geometry} />
