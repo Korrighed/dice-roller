@@ -7,6 +7,16 @@
   background-color: #fff;
 }
 
+.dices-card > div:first-child {
+  flex: 1 1 60%;
+  min-height: 0;
+}
+
+.dices-card > div:last-child {
+  flex: 1 1 40%;
+  min-height: 0;
+}
+
 /* Desktop: side-by-side layout */
 @media (min-width: 768px) {
   .dices-card {
@@ -14,7 +24,12 @@
   }
 
   .dices-card > div:first-child {
+    flex: 1;
     border-right: 1px solid #eee;
+  }
+
+  .dices-card > div:last-child {
+    flex: 0 0 auto;
   }
 }
 

@@ -4,11 +4,19 @@
   width: 100%;
 }
 
+.dice-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 /* Desktop: side-by-side with canvas */
 @media (min-width: 768px) {
   .dice-selector {
     flex-direction: column;
     width: auto;
     min-width: 140px;
+  }
+
+  .dice-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

@@ -8,12 +8,14 @@ const wrapStyle: React.CSSProperties = {
   flexDirection: 'column',
   gap: '1rem',
   padding: '1rem',
-  minWidth: '120px',
+  flex: '1 1 40%',
+  minHeight: '0',
+  overflow: 'auto',
 };
 
 const diceGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  gridTemplateColumns: 'repeat(4, 1fr)',
   gap: '0.5rem',
   justifyItems: 'center',
 };
@@ -50,7 +52,7 @@ interface DiceSelectorProps {
 export default function DiceSelector({ onAddDice, modifier, onModifierChange }: DiceSelectorProps) {
   return (
     <div style={wrapStyle} className="dice-selector">
-      <div style={{...diceGridStyle, gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: 'auto'}}>
+      <div style={diceGridStyle} className="dice-grid">
         {Object.values(DICE_CONFIGS).map((config) => (
           <DiceButton key={config.type} type={config.type} onClick={onAddDice} />
         ))}

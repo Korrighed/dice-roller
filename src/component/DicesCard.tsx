@@ -19,7 +19,7 @@ interface DicesCardProps {
 const styles = {
   card: {
     display: 'flex',
-    flexDirection: 'row' as const,
+    flexDirection: 'column' as const,
     flex: 1,
     gap: '0',
     padding: '0',
@@ -27,14 +27,15 @@ const styles = {
   canvasSection: {
     display: 'flex',
     flexDirection: 'column' as const,
-    flex: 1,
+    flex: '1 1 60%',
     gap: '1rem',
     padding: '1rem',
     minWidth: '0',
+    minHeight: '0',
   },
   canvasContainer: {
     position: 'relative' as const,
-    height: '350px',
+    height: '100%',
     minHeight: '0',
   },
   canvas: {
