@@ -1,30 +1,28 @@
 import React from 'react';
+import DiceButton from './DiceButton.tsx';
 import { DICE_REGISTRY } from '../config/diceRegistry.ts';
+import '../styles/DiceSelector.css';
 
 const wrapStyle: React.CSSProperties = {
   display: 'flex',
-  flexWrap: 'wrap',
-  gap: '0.5rem',
-  justifyContent: 'center',
-  alignItems: 'center',
+  flexDirection: 'column',
+  gap: '1rem',
+  padding: '1rem',
+  minWidth: '120px',
 };
 
-const btnStyle: React.CSSProperties = {
-  padding: '0.5rem 0.8rem',
-  border: '2px solid #ddd',
-  borderRadius: '6px',
-  backgroundColor: '#fff',
-  cursor: 'pointer',
-  fontWeight: 'bold',
-  fontSize: '0.85rem',
-  textTransform: 'uppercase',
+const diceGridStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: '0.5rem',
+  justifyItems: 'center',
 };
 
 const modifierWrapStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '0.25rem',
-  marginLeft: '0.5rem',
+  justifyContent: 'center',
+  gap: '0.5rem',
 };
 
 const modifierLabelStyle: React.CSSProperties = {
@@ -34,11 +32,11 @@ const modifierLabelStyle: React.CSSProperties = {
 };
 
 const modifierInputStyle: React.CSSProperties = {
-  width: '64px',
-  padding: '0.45rem 0.4rem',
+  width: '70px',
+  padding: '0.5rem 0.4rem',
   border: '2px solid #ddd',
   borderRadius: '6px',
-  fontSize: '0.85rem',
+  fontSize: '0.9rem',
   textAlign: 'center',
   fontWeight: 'bold',
 };
@@ -51,20 +49,21 @@ interface DiceSelectorProps {
 
 export default function DiceSelector({ onAddDice, modifier, onModifierChange }: DiceSelectorProps) {
   return (
-    <div style={wrapStyle}>
-      {DICE_REGISTRY.map((def) => (
-        <button key={def.type} style={btnStyle} onClick={() => onAddDice(def.type)}>
-          {def.type}
-        </button>
-      ))}
-      <div style={modifierWrapStyle}>
-        <span style={modifierLabelStyle}>+</span>
-        <input
-          type="number"
-          style={modifierInputStyle}
-          value={modifier}
-          onChange={(e) => onModifierChange(parseInt(e.target.value) || 0)}
-        />
+    <div style={wrapStyle} className="dice-selector">
+      <div style={{...diceGridStyle, gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: 'auto'}}>
+        {DICE_REGISTRY.map((def) => (
+          <DiceButton key={def.type} type={def.type} onClick={onAddDice} />
+        ))}
+        <div style={modifierWrapStyle}>
+          <span style={modifierLabelStyle}>+</span>
+          <input
+            type="number"
+            style={modifierInputStyle}
+            value={modifier}
+            onChange={(e) => onModifierChange(parseInt(e.target.value) || 0)}
+            onFocus={(e) => e.target.select()}
+          />
+        </div>
       </div>
     </div>
   );

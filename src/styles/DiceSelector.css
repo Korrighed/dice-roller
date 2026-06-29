@@ -1,0 +1,14 @@
+/* Mobile first: vertical layout */
+.dice-selector {
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Desktop: side-by-side with canvas */
+@media (min-width: 768px) {
+  .dice-selector {
+    flex-direction: column;
+    width: auto;
+    min-width: 140px;
+  }
+}
