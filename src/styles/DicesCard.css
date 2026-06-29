@@ -1,3 +1,23 @@
+/* Mobile: full width, flex column */
+.dices-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  background-color: #fff;
+}
+
+/* Desktop: side-by-side layout */
+@media (min-width: 768px) {
+  .dices-card {
+    flex-direction: row;
+  }
+
+  .dices-card > div:first-child {
+    border-right: 1px solid #eee;
+  }
+}
+
 .dice-card {
   display: flex;
   flex-direction: column;

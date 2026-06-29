@@ -14,7 +14,7 @@ function App() {
       </header>
 
       <main className="app-main">
-        <div className="app-card">
+        <div className="app-card app-card-dices">
           <DicesCard
             onAddDice={addPendingDice}
             pendingDice={pendingDice}
@@ -25,7 +25,8 @@ function App() {
             onResetResults={resetDiceResults}
             onClearCanvas={clearPendingDice}
           />
-          <div className="app-divider" />
+        </div>
+        <div className="app-card app-card-table">
           <DiceTableCard
             rolls={rolls}
             onAddRoll={() => {}}

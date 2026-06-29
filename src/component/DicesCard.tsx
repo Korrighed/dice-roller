@@ -19,15 +19,23 @@ interface DicesCardProps {
 const styles = {
   card: {
     display: 'flex',
+    flexDirection: 'row' as const,
+    flex: 1,
+    gap: '0',
+    padding: '0',
+  },
+  canvasSection: {
+    display: 'flex',
     flexDirection: 'column' as const,
     flex: 1,
     gap: '1rem',
     padding: '1rem',
+    minWidth: '0',
   },
   canvasContainer: {
     position: 'relative' as const,
-    flex: 1,
-    minHeight: '200px',
+    height: '350px',
+    minHeight: '0',
   },
   canvas: {
     width: '100%',
@@ -81,7 +89,7 @@ function DicesCard({ onAddDice, pendingDice, diceResults, modifier, onModifierCh
     pendingDice.forEach((dice) => {
       if (dice.pairId && dice.role === 'tens' && !seenPairs.has(dice.pairId)) {
         seenPairs.add(dice.pairId);
-        counts['d%'] = (counts['d%'] || 0) + 1;
+        counts['d100'] = (counts['d100'] || 0) + 1;
       } else if (!dice.pairId) {
         counts[dice.diceType] = (counts[dice.diceType] || 0) + 1;
       }
@@ -101,29 +109,31 @@ function DicesCard({ onAddDice, pendingDice, diceResults, modifier, onModifierCh
   };
 
   return (
-    <div style={styles.card}>
-      <div style={styles.canvasContainer}>
-        {pendingDice.length > 0 && (
-          <>
-            <button style={styles.rollButton} onClick={handleRoll}>
-              Roll {getDiceNotation()}
-            </button>
-            <button style={styles.clearButton} onClick={onClearCanvas}>
-              ✕
-            </button>
-          </>
-        )}
-        {pendingDice.length > 0 ? (
-          <Dice3DCanvas
-            pendingDice={pendingDice}
-            diceResults={diceResults}
-            isRolling={isRolling}
-          />
-        ) : (
-          <div style={styles.canvas}>
-            <div style={{ color: '#999' }}>Canvas 3D</div>
-          </div>
-        )}
+    <div style={styles.card} className="dices-card">
+      <div style={styles.canvasSection}>
+        <div style={styles.canvasContainer}>
+          {pendingDice.length > 0 && (
+            <>
+              <button style={styles.rollButton} onClick={handleRoll}>
+                Roll {getDiceNotation()}
+              </button>
+              <button style={styles.clearButton} onClick={onClearCanvas}>
+                ✕
+              </button>
+            </>
+          )}
+          {pendingDice.length > 0 ? (
+            <Dice3DCanvas
+              pendingDice={pendingDice}
+              diceResults={diceResults}
+              isRolling={isRolling}
+            />
+          ) : (
+            <div style={styles.canvas}>
+              <div style={{ color: '#999' }}>Canvas 3D</div>
+            </div>
+          )}
+        </div>
       </div>
 
       <DiceSelector onAddDice={onAddDice} modifier={modifier} onModifierChange={onModifierChange} />
