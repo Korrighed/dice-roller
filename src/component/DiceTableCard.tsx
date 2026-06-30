@@ -25,12 +25,12 @@ interface DiceTableCardProps {
 function DiceTableCard({ rolls, onDeleteRoll, onClearAll }: DiceTableCardProps) {
   return (
     <div className="dice-table">
-      <h2>Historique des jets</h2>
+      <h2>Roll History</h2>
       <table>
         <thead>
           <tr className="header-row">
-            <th className="header-cell">Dés</th>
-            <th className="header-cell">Résultats</th>
+            <th className="header-cell">Dice</th>
+            <th className="header-cell">Results</th>
             <th className="header-cell">Total</th>
             <th className="header-cell">Actions</th>
           </tr>
@@ -39,7 +39,7 @@ function DiceTableCard({ rolls, onDeleteRoll, onClearAll }: DiceTableCardProps) 
           {rolls.length === 0 ? (
             <tr>
               <td colSpan={4} className="empty">
-                Aucun jet enregistré
+                No rolls yet
               </td>
             </tr>
           ) : (
@@ -57,7 +57,7 @@ function DiceTableCard({ rolls, onDeleteRoll, onClearAll }: DiceTableCardProps) 
                 <td className="cell result">{roll.total}</td>
                 <td className="cell">
                   <button className="delete-btn" onClick={() => onDeleteRoll(roll.id)}>
-                    Supprimer
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -68,7 +68,7 @@ function DiceTableCard({ rolls, onDeleteRoll, onClearAll }: DiceTableCardProps) 
 
       {rolls.length > 0 && (
         <button className="clear-btn" onClick={onClearAll}>
-          Effacer l'historique complet
+          Clear all history
         </button>
       )}
     </div>

@@ -126,7 +126,7 @@ export function useRolls(): UseRollsReturn {
       notation,
       results,
       total,
-      timestamp: new Date().toLocaleString('fr-FR'),
+      timestamp: new Date().toLocaleString('en-GB'),
     };
 
     setRolls([newRoll, ...rolls]);

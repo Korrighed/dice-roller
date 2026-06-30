@@ -107,7 +107,7 @@ function DicesCard({ onAddDice, pendingDice, diceResults, modifier, onModifierCh
           {pendingDice.length > 0 && (
             <>
               <button style={styles.rollButton} onClick={handleRoll}>
-                Lancer {getDiceNotation()}
+                Roll {getDiceNotation()}
               </button>
               <button style={styles.clearButton} onClick={onClearCanvas}>
                 ✕
@@ -122,7 +122,7 @@ function DicesCard({ onAddDice, pendingDice, diceResults, modifier, onModifierCh
             />
           ) : (
             <div style={styles.canvas}>
-              <div style={{ color: '#999' }}>Scène 3D</div>
+              <div style={{ color: '#999' }}>Add dice to roll</div>
             </div>
           )}
         </div>
