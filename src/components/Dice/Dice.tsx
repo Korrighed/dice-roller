@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { DICE_CONFIGS, DiceType } from './configs/index.ts';
 import { useDiceRotation } from '../../hooks/useDiceRotation.ts';
@@ -40,22 +41,17 @@ export default function Dice({ type, position, result, isRolling = false }: Dice
     });
   }, [config]);
 
-  useEffect(() => {
-    const animate = () => {
-      if (!meshRef.current) return;
-      if (isRolling) {
-        meshRef.current.rotation.x += speedRef.current.x;
-        meshRef.current.rotation.y += speedRef.current.y;
-        meshRef.current.rotation.z += speedRef.current.z;
-      } else if (result !== undefined && config.faceUp[result]) {
-        const [rx, ry, rz] = config.faceUp[result];
-        meshRef.current.rotation.set(rx, ry, rz);
-      }
-    };
-
-    const animationId = setInterval(animate, 1000 / 60);
-    return () => clearInterval(animationId);
-  }, [isRolling, result, config, speedRef]);
+  useFrame(() => {
+    if (!meshRef.current) return;
+    if (isRolling) {
+      meshRef.current.rotation.x += speedRef.current.x;
+      meshRef.current.rotation.y += speedRef.current.y;
+      meshRef.current.rotation.z += speedRef.current.z;
+    } else if (result !== undefined && config.faceUp[result]) {
+      const [rx, ry, rz] = config.faceUp[result];
+      meshRef.current.rotation.set(rx, ry, rz);
+    }
+  });
 
   return (
     <mesh ref={meshRef} material={materials} position={position} geometry={geometry} />
